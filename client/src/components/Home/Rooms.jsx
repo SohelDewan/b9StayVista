@@ -11,14 +11,15 @@ const Rooms = () => {
   // eslint-disable-next-line no-unused-vars
   const [params, setParams] = useSearchParams()
   const category = params.get('category')
+
   console.log(category) //thist category comes from categoryBox component
   const axiosCommon = useAxiosCommon()
   const { data: rooms = [], isLoading } = useQuery({
-    queryKey: ['rooms'],
+    queryKey: ['rooms', category],
     queryFn: async ()=>{
-      const {data} = await axiosCommon.get(`/rooms/category=${category}`)
+      const {data} = await axiosCommon.get(`/rooms?category=${category}`)
       return data
-    }
+    },
   })
   if (isLoading) return <LoadingSpinner />
 

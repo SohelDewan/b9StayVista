@@ -8,11 +8,12 @@ const CategoryBox = ({ label, icon: Icon }) => {
   const category = params.get('category')
   console.log(category===label)
   const navigate = useNavigate()
+
   const handleClick = () => {
-    let queryLabel = { category : label }
+    let currentQuery = { category : label }
     const url = queryString.stringifyUrl({
       url:'/',
-      query: queryLabel
+      query: currentQuery
     })
     // console.log(url)
     navigate(url)

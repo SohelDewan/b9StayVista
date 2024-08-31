@@ -80,7 +80,7 @@ async function run() {
     // Get all rooms from db
     app.get('/rooms', async (req, res)=> {
       const category = req.query.category
-      console.log(category)
+      // console.log(category)
       // const query = category? { category } : {}
       let query = {}
       if (category && category !== 'null') query = {category}

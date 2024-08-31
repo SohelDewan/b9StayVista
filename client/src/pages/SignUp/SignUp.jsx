@@ -2,13 +2,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 
 const SignUp = () => {
-  const navigate = useNavigate()
-  const { createUser, signInWithGoogle, updateUserProfile, loading, setLoading } = useAuth();
-  const handleSubmit = async e => {
+  const navigate = useNavigate();
+  const {
+    createUser,
+    signInWithGoogle,
+    updateUserProfile,
+    loading,
+    setLoading,
+  } = useAuth();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
@@ -16,41 +23,41 @@ const SignUp = () => {
     const password = form.password.value;
     const image = form.image.files[0];
 
-    const formData = new FormData()
-    formData.append('image', image)
+    const formData = new FormData();
+    formData.append("image", image);
     try {
-      setLoading(true)
+      setLoading(true);
       const { data } = await axios.post(
         `https://api.imgbb.com/1/upload?key=${
           import.meta.env.VITE_IMGBB_API_KEY
         }`,
         formData
       );
-      console.log(data.data.display_url)
+      console.log(data.data.display_url);
       // Create user or register
       const result = await createUser(email, password);
-      console.log(result)
-        // 3. Save username and photo in firebase
-       await updateUserProfile(name, data.data.display_url)
-        navigate("/");
-        toast.success(`User signup successfully`)
+      console.log(result);
+      // 3. Save username and photo in firebase
+      await updateUserProfile(name, data.data.display_url);
+      navigate("/");
+      toast.success(`User signup successfully`);
     } catch (err) {
       toast.error(err.message);
     }
   };
-    // handle google signin
-    const handleGoogleSignIn = async () => {
-      try {
-        await signInWithGoogle()
-  
-        navigate('/')
-        toast.success('Signup Successful')
-      } catch (err) {
-        console.log(err)
-        toast.error(err.message)
-      }
+  // handle google signin
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+
+      navigate("/");
+      toast.success("Signup Successful");
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
     }
-  
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900">
@@ -124,11 +131,15 @@ const SignUp = () => {
 
           <div>
             <button
-            disabled={loading}
+              disabled={loading}
               type="submit"
               className="bg-rose-500 w-full rounded-md py-3 text-white"
             >
-              {loading? < TbFidgetSpinner className="animate-spin m-auto" /> : "Continue"}
+              {loading ? (
+                <TbFidgetSpinner className="animate-spin m-auto" />
+              ) : (
+                "Continue"
+              )}
             </button>
           </div>
         </form>
@@ -140,8 +151,9 @@ const SignUp = () => {
           <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
         </div>
         <button
-        onClick={handleGoogleSignIn}
-        className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer">
+          onClick={handleGoogleSignIn}
+          className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer"
+        >
           <FcGoogle size={32} />
 
           <p>Continue with Google</p>
